@@ -135,6 +135,25 @@ This is an open project and contributors are encouraged to improve it further. P
 
 ---
 
+## Sample outputs
+
+### 1. Speech to Text Interface
+![Speech to Text](text to speech.png)
+
+---
+
+### 2. Text Translation Interface
+![Translation Interface](text translator.png)
+
+---
+
+### 3. Text Suggestion / Input Area
+![Text Suggestion](text suggestion.png)
+
+---
+
+### 4. Language Selection Dropdown
+![Language Selection](languages.png)
 ## License
 
 This project is licensed under the MIT License.
