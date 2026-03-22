@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice to Text & Translation</title>
+    <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 0;
+              background-color: #B5A89F;
+              color: #333;
+            }
+        
+            header {
+              text-align: center;
+              padding: 20px;
+              background-color: #EDE7E3;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+        
+            .tabs {
+              display: flex;
+              justify-content: center;
+              margin: 20px 0;
+            }
+        
+            .tabs button {
+              padding: 10px 20px;
+              margin: 0 5px;
+              border: none;
+              background-color: #f1f1f1;
+              cursor: pointer;
+              font-size: 1rem;
+              border-radius: 5px;
+            }
+        
+            .tabs button.active {
+              background-color: #333;
+              color: #fff;
+            }
+        
+            .content {
+              max-width: 600px;
+              margin: 0 auto;
+              padding: 20px;
+              background-color: #EDE7E3;
+              border-radius: 10px;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+        
+            .content textarea,
+            .content select,
+            .content button {
+              width: 100%;
+              box-sizing: border-box;
+              height: auto;
+              padding: 10px;
+              margin-bottom: 20px;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              font-size: 1rem;
+            }
+        
+            .content button {
+              background-color: #333;
+              color: #fff;
+              border: none;
+              cursor: pointer;
+            }
+        
+            .content button:hover {
+              background-color: #555;
+            }
+        
+            .microphone {
+              text-align: center;
+            }
+        
+            .microphone button {
+              background-color: transparent;
+              border: none;
+              cursor: pointer;
+            }
+        
+            .microphone img {
+              width: 50px;
+              height: 50px;
+            }
+        
+            .recognized-text,
+            .translated-text {
+              margin-top: 20px;
+              padding: 10px;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              background-color: #f1f1f1;
+              min-height: 50px;
+            }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Voice to Text & Translation</h1>
+        <p>Convert speech to text and translate between languages</p>
+    </header>
+   
+    <div class="tabs">
+        <button id="voiceToTextTab" class="active" onclick="showVoiceToText()">Voice to Text</button>
+        <button id="translationTab" onclick="showTranslation()">Translation</button>
+    </div>
+   
+    <!-- Voice to Text Section -->
+    <div id="voiceToTextContent" class="content">
+        <h2>Speak in English</h2>
+        <p>Click the microphone and start speaking</p>
+        <div class="microphone">
+            <button onclick="startRecording()">
+                <img src="4.jpg" alt="Microphone">
+            </button>
+        </div>
+        <div class="recognized-text" id="recognizedText">
+            <p>Your spoken words will appear here...</p>
+        </div>
+        <button onclick="copyVoiceText()">Copy</button>
+    </div>
+   
+    <!-- Translation Section -->
+    <div id="translationContent" class="content" style="display: none;">
+        <h2>Translate Text</h2>
+        <p>Enter English text and select target language</p>
+        <textarea id="inputText" placeholder="Enter text to translate..."></textarea>
+        <select id="languageSelect">
+            <option value="hi">Hindi</option>
+            <option value="ta">Tamil</option>
+            <option value="te">Telugu</option>
+            <option value="mr">Marathi</option>
+            <option value="bn">Bengali</option>
+            <option value="gu">Gujarati</option>
+            <option value="pa">Punjabi</option>
+            <option value="kn">Kannada</option>
+            <option value="ml">Malayalam</option>
+            <option value="or">Odia</option>
+        </select>
+        <button onclick="translateText()">Translate</button>
+        <div class="translated-text" id="translatedText">
+            <p>Translated text will appear here...</p>
+        </div>
+        <button onclick="copyTranslatedText()">Copy</button>
+    </div>
+
+    <script>
+        // Tab Switching Logic
+        function showVoiceToText() {
+            document.getElementById('voiceToTextContent').style.display = 'block';
+            document.getElementById('translationContent').style.display = 'none';
+            document.getElementById('voiceToTextTab').classList.add('active');
+            document.getElementById('translationTab').classList.remove('active');
+        }
+        function showTranslation() {
+            document.getElementById('voiceToTextContent').style.display = 'none';
+            document.getElementById('translationContent').style.display = 'block';
+            document.getElementById('voiceToTextTab').classList.remove('active');
+            document.getElementById('translationTab').classList.add('active');
+        }
+
+        // Voice to Text using Web Speech API
+        function startRecording() {
+            let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = "en-US";
+            recognition.start();
+            recognition.onresult = function(event) {
+                let text = event.results[0][0].transcript;
+                document.getElementById('recognizedText').innerHTML = `<p>${text}</p>`;
+            };
+            recognition.onerror = function(event) {
+                document.getElementById('recognizedText').innerHTML = `<p>Speech recognition failed. Try again.</p>`;
+            };
+        }
+
+        // Copy Voice-to-Text Output
+        function copyVoiceText() {
+            let text = document.getElementById('recognizedText').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Text copied to clipboard!');
+            });
+        }
+
+        // Translation using MyMemory API
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxq5n3BFq1aOjW1dDczDjm3oBcDHMEzv5Dw8EcPHR1Y7TOpY0JZwrMJ0jPPaGBC5IWU/exec";
+
+    async function translateText() {
+      const inputText = document.getElementById('inputText').value;
+      const targetLang = document.getElementById('languageSelect').value;
+      const outputDiv = document.getElementById('translatedText');
+
+      if (!inputText.trim()) {
+        outputDiv.innerHTML = "<p>Please enter text to translate</p>";
+        return;
+      }
+
+      try {
+        const res = await fetch(`${GOOGLE_SCRIPT_URL}?q=${encodeURIComponent(inputText)}&target=${targetLang}`);
+        const data = await res.json();
+        outputDiv.innerHTML = `<p>${data.translatedText}</p>`;
+      } catch (err) {
+        console.error("Translation error:", err);
+        outputDiv.innerHTML = "<p>Error during translation.</p>";
+      }
+    }
+
+    function copyTranslatedText() {
+      const translatedText = document.getElementById('translatedText').textContent;
+      navigator.clipboard.writeText(translatedText)
+        .then(() => alert('Translated text copied to clipboard!'))
+        .catch(err => alert('Failed to copy text.'));
+    }
+    </script>
+</body>
+</html>
