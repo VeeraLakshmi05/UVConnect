@@ -138,17 +138,17 @@ This is an open project and contributors are encouraged to improve it further. P
 ## Sample outputs
 
 ### 1. Speech to Text Interface
-![Speech to Text](text to speech.png)
+![Speech to Text](speechtotext.png)
 
 ---
 
 ### 2. Text Translation Interface
-![Translation Interface](text translator.png)
+![Translation Interface](texttranslatorinterface.png)
 
 ---
 
 ### 3. Text Suggestion / Input Area
-![Text Suggestion](text suggestion.png)
+![Text Suggestion](textsuggestions.png)
 
 ---
 
